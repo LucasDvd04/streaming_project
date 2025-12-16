@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}6iAtlas{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row g-3 mt-2">
+        
+        
+
+        {% if user.is_authenticated%}<!-- COLUNA DO PLAYER -->
+        <!-- COLUNA DA IMAGEM / INFO -->
+        <div class="col-md-4">
+            <div class="card h-100">
+
+                <img src="{{ media.poster }}"
+                     class="card-img-top img-fluid"
+                     style="height: 40vh; object-fit: fill;"
+                     alt="{{ media.title }}">
+
+                <div class="card-body">
+                    <h5 class="card-title text-center">{{ media.title }}</h5>
+
+                    <p><strong>Genre:</strong> {{ media.genre }}</p>
+                    <p><strong>Release Date:</strong> {{ media.lancament_date|date:"d/m/Y" }}</p>
+                    <p><strong>Rating:</strong> {{ media.rating }}</p>
+                    <p><strong>Synopsis:</strong> {{ media.sinopse }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="ratio ratio-16x9">
+                <iframe
+                    src="https://superflixapi.run/{{ media.typeMedia }}/{{ media.idIMDB }}"
+                    allow="autoplay; encrypted-media; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+        {% else %}
+               <div class="row justify-content-center mt-3">
+    <div class="col-12 col-sm-8 col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 shadow-sm">
+
+            <!-- Imagem do Card -->
+            <img src="{{ media.poster }}"
+                 class="card-img-top img-fluid"
+                 style="width: 100%; height: auto; max-height: 50vh; object-fit: contain;"
+                 alt="{{ media.title }}">
+
+            <!-- Conteúdo do Card -->
+            <div class="card-body">
+                <h5 class="card-title text-center">{{ media.title }}</h5>
+
+                <p><strong>Genre:</strong> {{ media.genre }}</p>
+                <p><strong>Release Date:</strong> {{ media.lancament_date|date:"d/m/Y" }}</p>
+                <p><strong>Rating:</strong> {{ media.rating }}</p>
+                <p><strong>Synopsis:</strong> {{ media.sinopse }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}6iAtlas{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- TÍTULO -->
+    <div class="row mt-4">
+        <div class="col text-center">
+            {% if medias and medias.first.typeMedia == 'movie' %}
+                <h3>Movies</h3>
+            {% else %}
+                <h3>Series</h3>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- GRID DE CARDS -->
+    <div class="p-2 rounded overflow-auto">
+        <div class="row justify-content-center">
+
+            {% for media in medias %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4">
+                    <div class="card h-100 shadow-sm">
+
+                        <a href="{% url 'detail_media' media.id %}">
+                            <img src="{{ media.poster }}"
+                                 class="card-img-top img-fluid"
+                                 style="width: 100%; height: auto; max-height: 40vh; object-fit: contain;"
+                                 alt="{{ media.title }}">
+                        </a>
+
+                        <div class="card-body text-center">
+                            <h6 class="card-title">{{ media.title }}</h6>
+                        </div>
+
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col text-center">
+                    <p>Nenhum resultado encontrado.</p>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

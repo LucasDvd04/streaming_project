@@ -1,0 +1,36 @@
+  <div id="carouselFilmes" class="carousel slide mb-4" data-bs-ride="carousel">
+  <div class="carousel-inner">
+
+    {% for page in movies %}
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+      <div class="container">
+        <div class="row flex-nowrap overflow-auto">
+
+          {% for p in page %}
+          <div class="col-8 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+            <div class="card h-100 ">
+                <img src="{{ p.poster }}" class="card-img-top" alt="{{ p }}" style="height: 25vh; width: 100% ;object-fit: fill;">
+                <div class="card-body">
+                    {{ p.get_data }}
+                </div>
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselFilmes" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselFilmes" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+
+</div>
+
