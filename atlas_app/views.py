@@ -26,17 +26,21 @@ def chunk_list(lst, n):
 def homeView(request):
     
     if request.method == 'GET':
-        lancements = Lançamentos.objects.all().order_by('post_date')
+        last_add = Lançamentos.objects.all().order_by('post_date')
         populars = Popular.objects.all()
-        pages = list(chunk_list(lancements,6))
+        last = Media.objects.all().order_by('-lancament_date')[:10]
+        if not last_add:
+            pages = list(chunk_list(last,6))
+        else:
+            pages = list(chunk_list(last_add,6))
+
         filter = request.GET.get('gender')
-        print('-----filter-----')
-        print(filter)
-        print('-----pages-----')
-        print(populars[1].id)
+
 
         fit = {'filltler':filter}
-        print(fit)
+
+        
+
 
     return render(request, 'index.html',{'movies':pages, 'populars':populars, 'filter':filter})
 
@@ -49,7 +53,7 @@ class MoviesListView(generic.ListView):
     model = Media
     context_object_name = 'medias'
     template_name = 'medias_list.html'
-    paginate_by = 20
+    paginate_by = 18
 
     def get_queryset(self):
         qs = Media.objects.filter(typeMedia='filme')
@@ -71,8 +75,8 @@ class SeriesListView(generic.ListView):
     model = Media
     context_object_name = 'medias'
     template_name = 'medias_list.html'
-    paginate_by = 20
-
+    paginate_by = 18
+    
     def get_queryset(self):
         qs = Media.objects.filter(typeMedia='serie')
 

@@ -3,8 +3,13 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 import requests
 import json
-from datetime import datetime
+from datetime import datetime, date
+import re
 from atlas_app.models import Lançamentos, Media, Genres, Popular, APIKey
+
+def getKeyAPI(name):
+    key = APIKey.objects.get(name=name).key
+    return key
 
 def setGenres(request):
     url = "https://api.themoviedb.org/3/genre/movie/list?language=en-US"
@@ -28,15 +33,21 @@ def setGenres(request):
 
     return JsonResponse(response,status=201, safe=False)
 
-def dataRealease(data):
-    if data['Released'] != 'N/A':
-        return datetime.strptime(data['Released'], '%d %b %Y').date()
-    return datetime(int(data['Year']), 1, 1).date()
+def setMedias(request):
+    movies = json.loads(requests.get('https://superflixapi.run/lista?category=movie&type=imdb&format=json').text)
+    series = json.loads(requests.get('https://superflixapi.run/lista?category=serie&type=imdb&format=json').text)
+    medias_atuais = Media.objects.all().values_list('idIMDB', flat=True)
+    movies = [m for m in movies if m not in medias_atuais] 
+    series = [s for s in series if s not in medias_atuais]
+    movies_10 = movies[:200]
+    series_10 = series[:200]
+    movies_data = setDatasMedias(request, movies_10, 'filme')
+    series_data = setDatasMedias(request, series_10, 'serie')
 
-def getKeyAPI(name):
-    key = APIKey.objects.get(name=name).key
-    return key
+    Media.objects.bulk_create(movies_data)
+    Media.objects.bulk_create(series_data)
 
+    return HttpResponse('ok')
 
 def setDatasMedias(request, ids, type):
     medias = []
@@ -60,43 +71,20 @@ def setDatasMedias(request, ids, type):
 
     return medias
 
+def dataRealease(data):
+    # Caso tenha data completa
+    if data.get('Released') and data['Released'] != 'N/A':
+        return datetime.strptime(data['Released'], '%d %b %Y').date()
 
+    # Caso não tenha, tenta extrair o primeiro ano
+    year_str = data.get('Year', '')
+    match = re.search(r'\d{4}', year_str)
 
+    if match:
+        return date(int(match.group()), 1, 1)
 
-def setMedias(request):
-    movies = json.loads(requests.get('https://superflixapi.run/lista?category=movie&type=imdb&format=json').text)
-    series = json.loads(requests.get('https://superflixapi.run/lista?category=serie&type=imdb&format=json').text)
-    medias_atuais = Media.objects.all().values_list('idIMDB', flat=True)
-    movies = [m for m in movies if m not in medias_atuais] 
-    series = [s for s in series if s not in medias_atuais]
-    movies_10 = movies[:200]
-    series_10 = series[:200]
-    movies_data = setDatasMedias(request, movies_10, 'filme')
-    series_data = setDatasMedias(request, series_10, 'serie')
-
-    Media.objects.bulk_create(movies_data)
-    Media.objects.bulk_create(series_data)
-
-    return HttpResponse('ok')
-
-
-def setPictureID(dict, key):
-    id = dict['imdb_id']
-    url = f'http://www.omdbapi.com/?i={id}&apikey={key}'
-    poster = json.loads(requests.get(url).text)
-    if poster['Response'] == 'True':
-        dict['poster'] = poster['Poster']
-        dict['response'] = poster['Response']
-        if poster['Ratings']:
-            dict['rating'] = poster['Ratings'][0]['Value']
-        else:
-            dict['rating'] = ''
-    else:
-        print('vazio')
-        dict['poster'] = ''
-        dict['rating'] = ''
-        dict['response'] = poster['Response']
-
+    # fallback final
+    return None
 
 def updateFuture(request):
     Lançamentos.objects.all().delete()
@@ -104,8 +92,6 @@ def updateFuture(request):
     resul = json.loads(result.text)
     news = []
     titles = []
-    # print(type(resul))
-    medias = []
     key  = getKeyAPI('omdb')
     for r in resul:
         if r['status'] == 'Futuro':
@@ -117,6 +103,7 @@ def updateFuture(request):
                 if r['response'] == 'False':
                     continue
                 else:
+                    print('salvando lançamento')
                     lançamento = Lançamentos(
                         title = r['title'],
                         idIMDB = r['imdb_id'],
@@ -130,6 +117,26 @@ def updateFuture(request):
         
 
     return JsonResponse(news,status=201, safe=False)
+
+def setPictureID(dict, key):
+    id = dict['imdb_id']
+    url = f'http://www.omdbapi.com/?i={id}&apikey={key}'
+    poster = json.loads(requests.get(url).text)
+    if poster['Response'] == 'True':
+        dict['poster'] = poster['Poster']
+        dict['response'] = poster['Response']
+        if poster['Ratings']:
+            dict['rating'] = str(poster['Ratings'][0]['Value'])
+        else:
+            dict['rating'] = None
+    else:
+        print('vazio')
+        dict['poster'] = ''
+        dict['rating'] = None
+        dict['response'] = poster['Response']
+
+
+
 
 @csrf_exempt
 def futureInsertView(request):

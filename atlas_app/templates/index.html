@@ -2,23 +2,28 @@
 {% block title %} 6iAtlas {% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
-<div class="container-fluid">    
-    <div class="mt-4"><h3>Proximos Lançamentos  ( Novos Episodios )</h3></div>
+<div class="container-fluid ">
+    <div class="col text-center  mt-4">
+        <h3>Recent Insert</h3>
+    </div>
     {% include 'components/_carrossel_news.html' %}
 
- <div class="mt-4"><h3>Em Alta</h3></div>
-    <div class="p-2 rounded overflow-auto">
-        <div class="row flex-nowrap">
+    <div class="mt-4">
+        <div class="col text-center">
+            <h3>Trending</h3>
+        </div>
+    </div>
+    <div class="col ">
+    <div class="p-2 rounded overflow-auto  ">
+        <div class="row flex-nowrap justify-content-center">
 
             {% for popular in populars %}
             <div class="col-8 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                 <div class="card h-100">
                     <div class="card-title mb-0 text-center">
                         <a href="{% url 'detail_media' popular.media.id %}">
-                            <img src="{{ popular.media.poster }}"
-                             class="img-fluid"
-                             style="height: 40vh; width: 100%; object-fit: fill;"
-                             alt="{{ popular.media.title }}">
+                            <img src="{{ popular.media.poster }}" class="img-fluid"
+                                style="height: 40vh; width: 100%; object-fit: fill;" alt="{{ popular.media.title }}">
                         </a>
                     </div>
                 </div>
@@ -26,6 +31,7 @@
             {% endfor %}
 
         </div>
+    </div>
     </div>
 </div>
 {% endblock %}

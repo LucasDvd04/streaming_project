@@ -1,4 +1,4 @@
-  <div id="carouselFilmes" class="carousel slide mb-4" data-bs-ride="carousel">
+<div id="carouselFilmes" class="carousel slide mb-4" data-bs-ride="carousel">
   <div class="carousel-inner">
 
     {% for page in movies %}
@@ -6,31 +6,50 @@
       <div class="container">
         <div class="row flex-nowrap overflow-auto">
 
-          {% for p in page %}
-          <div class="col-8 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-            <div class="card h-100 ">
-                <img src="{{ p.poster }}" class="card-img-top" alt="{{ p }}" style="height: 25vh; width: 100% ;object-fit: fill;">
-                <div class="card-body">
-                    {{ p.get_data }}
-                </div>
-            </div>
-          </div>
-          {% endfor %}
 
+
+          {% for p in page %}
+
+
+          {%if p.typeMedia == 'filme' %}
+          <div class="col-8 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+            <div class="card h-100 text-bg-danger">
+              <a href="{% url 'detail_media' p.id %}"><img src="{{ p.poster }}" class="card-img" alt="{{ p }}"
+                  style="height: 40vh; width: 100% ;object-fit: fill;">
+
+                <div class="card-img-overlay">
+                  <h5 class="card-title "><i class="bi bi-film" style="color:red;"></i></h5>
+                </div>
+              </a>
+            </div>
+            {% else %}
+            <div class="col-8 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+              <div class="card h-100 text-bg-primary">
+                <a href="{% url 'detail_media' p.id %}"><img src="{{ p.poster }}" class="card-img" alt="{{ p }}"
+                    style="height: 40vh; width: 100% ;object-fit: fill;">
+                  <div class="card-img-overlay">
+                    <h5 class="card-title"><i class="bi bi-tv" style="color:rgb(0, 17, 255);"></i></h5>
+                  </div>
+                </a>
+
+              </div>
+              {%endif %}
+            </div>
+            {% endfor %}
+
+          </div>
         </div>
       </div>
+      {% endfor %}
+
     </div>
-    {% endfor %}
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselFilmes" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselFilmes" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
 
   </div>
-
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselFilmes" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon"></span>
-  </button>
-
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselFilmes" data-bs-slide="next">
-    <span class="carousel-control-next-icon"></span>
-  </button>
-
-</div>
-

@@ -11,7 +11,7 @@ class Genres(models.Model):
 class Media(models.Model):
 
     types = [
-        ('movie', 'Filme'),
+        ('filme', 'Filme'),
         ('serie', 'Serie'),
     ]
 
@@ -31,9 +31,9 @@ class Media(models.Model):
 class Lançamentos(models.Model):
     title = models.CharField(max_length=50)
     idIMDB =models.CharField(max_length=20, null=True, blank=True)
-    rating = models.CharField()
-    poster = models.CharField()
-    post_date = models.DateField()
+    rating = models.CharField(null=True, blank=True, max_length=10)
+    poster = models.CharField(null=True, blank=True)
+    post_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.title
