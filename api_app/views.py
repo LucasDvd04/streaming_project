@@ -1,11 +1,16 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import generics
+from rest_framework.response import Response
+
 import requests
 import json
 from datetime import datetime, date
 import re
+
 from atlas_app.models import Lançamentos, Media, Genres, Popular, APIKey
+from .serializers import MediaSerializer,InsetMediaSerializer,InsetLancamentsSerializer,LancamentsSerializer,TrendsSerializer,InsetTrendsSerializer
 
 def getKeyAPI(name):
     key = APIKey.objects.get(name=name).key
@@ -34,8 +39,8 @@ def setGenres(request):
     return JsonResponse(response,status=201, safe=False)
 
 def setMedias(request):
-    movies = json.loads(requests.get('https://superflixapi.run/lista?category=movie&type=imdb&format=json').text)
-    series = json.loads(requests.get('https://superflixapi.run/lista?category=serie&type=imdb&format=json').text)
+    movies = json.loads(requests.get('https://superflixapi.buzz/lista?category=movie&type=imdb&format=json').text)
+    series = json.loads(requests.get('https://superflixapi.buzz/lista?category=serie&type=imdb&format=json').text)
     medias_atuais = Media.objects.all().values_list('idIMDB', flat=True)
     movies = [m for m in movies if m not in medias_atuais] 
     series = [s for s in series if s not in medias_atuais]
@@ -88,7 +93,7 @@ def dataRealease(data):
 
 def updateFuture(request):
     Lançamentos.objects.all().delete()
-    result = requests.get('https://superflixapi.run/calendario.php')
+    result = requests.get('https://superflixapi.buzz/calendario.php')
     resul = json.loads(result.text)
     news = []
     titles = []
@@ -134,9 +139,6 @@ def setPictureID(dict, key):
         dict['poster'] = ''
         dict['rating'] = None
         dict['response'] = poster['Response']
-
-
-
 
 @csrf_exempt
 def futureInsertView(request):
@@ -198,3 +200,49 @@ def isertPopularMovieView(request):
     return JsonResponse(news, status=201, safe=False)
 
 
+def get_medias(request):
+    ...
+
+class ListMedias(generics.ListAPIView):
+    queryset = Media.objects.all()
+    serializer_class = MediaSerializer
+    
+class CreatMedia(generics.CreateAPIView):
+    queryset = Media.objects.all()
+    serializer_class = InsetMediaSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data, status=201)
+    
+
+class ListLancaments(generics.ListAPIView):
+    queryset = Lançamentos.objects.all()
+    serializer_class = LancamentsSerializer
+    
+class CreatLancaments(generics.CreateAPIView):
+    queryset = Lançamentos.objects.all()
+    serializer_class = InsetLancamentsSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data, status=201)
+    
+class ListPopular(generics.ListAPIView):
+    queryset = Popular.objects.all()
+    serializer_class = TrendsSerializer
+    
+class CreatPopular(generics.CreateAPIView):
+    queryset = Popular.objects.all()
+    serializer_class = InsetTrendsSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data, status=201)
+    

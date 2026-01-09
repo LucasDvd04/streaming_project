@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-tg94#kme=aw%4%3rx-@pjjqb0zj*z$ca7l$db467xk!oj#zmi#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['lucasdvd04.pythonanywhere.com']
+ALLOWED_HOSTS = ['lucasdvd04.pythonanywhere.com',
+                 'localhost','127.0.0.1']
 
 
 # Application definition
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
 
     'atlas_app',
     'api_app',

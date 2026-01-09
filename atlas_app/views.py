@@ -7,7 +7,7 @@ from .models import Lançamentos, Popular, Genres, Media
 
 
 def addedView(request):
-    result = requests.get('https://superflixapi.run/calendario.php')
+    result = requests.get('https://superflixapi.buzz/calendario.php')
     resul = result
     # print(type(resul))
     for r in result:
