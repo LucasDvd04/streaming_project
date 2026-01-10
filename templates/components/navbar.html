@@ -1,28 +1,48 @@
 <div class="container-fluid mt-4 col-md-10 p-2">
     <div class="row">
         <div class="col"><h3>6iAtlas</h3></div>
+
         <div class="col-8">
-            <form method="get">
+            <form method="get" action="{% url 'search_media' %}">
                 <div class="input-group mb-3">
-                <input type="text" class="form-control" id="filter" name="filter" placeholder="Spider-Man 2"
-                    aria-label="Spider-Man" aria-describedby="button-addon2">
-                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Button</button>
-                {% if user.is_authenticated%}
-                    <a href="{%url 'user_out' %}" class="btn btn-outline-danger ms-2">Logout</a>
-                {% else %}
-                    <a href="{%url 'user_log' %}" class="btn btn-outline-primary ms-2">Login</a>
-                {% endif %}
-            </div>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="filter"
+                        name="filter"
+                        placeholder="Spider-Man 2"
+                        value="{{ filter }}"
+                        aria-label="Spider-Man"
+                        aria-describedby="button-addon2"
+                    >
+
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+                        Buscar
+                    </button>
+
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'user_out' %}" class="btn btn-outline-danger ms-2">Logout</a>
+                    {% else %}
+                        <a href="{% url 'user_log' %}" class="btn btn-outline-primary ms-2">Login</a>
+                    {% endif %}
+                </div>
             </form>
         </div>
     </div>
+
     <div class="row justify-content-center mt-3">
-    <div class="col-auto">
-        <div class="btn-group">
-            <a href="{% url 'home' %}" class="btn btn-secondary"><i class="bi bi-house"> Home</i></a>
-            <a href="{% url 'movies_media' %}" class="btn btn-danger"><i class="bi bi-film"> Movies</i></a>
-            <a href="{% url 'series_media' %}" class="btn btn-primary"><i class="bi bi-tv"> Series</i></a>
+        <div class="col-auto">
+            <div class="btn-group">
+                <a href="{% url 'home' %}" class="btn btn-secondary">
+                    <i class="bi bi-house"></i> Home
+                </a>
+                <a href="{% url 'movies_media' %}" class="btn btn-danger">
+                    <i class="bi bi-film"></i> Movies
+                </a>
+                <a href="{% url 'series_media' %}" class="btn btn-primary">
+                    <i class="bi bi-tv"></i> Series
+                </a>
+            </div>
         </div>
     </div>
-</div>
 </div>

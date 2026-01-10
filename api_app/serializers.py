@@ -4,7 +4,7 @@ from atlas_app.models import Media, Lançamentos, Popular
 class MediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Media
-        fields = ['id','idIMDB',]
+        fields = ['id','idIMDB','title',]
 
 
 class InsetMediaSerializer(serializers.ModelSerializer):
@@ -29,10 +29,10 @@ class InsetLancamentsSerializer(serializers.ModelSerializer):
 class TrendsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Popular
-        fields = ['media']
+        fields = ['id','media',]
 
 
 class InsetTrendsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Popular
-        fields = ['media']
+        fields = ['media',]

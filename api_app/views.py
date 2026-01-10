@@ -246,3 +246,9 @@ class CreatPopular(generics.CreateAPIView):
         self.perform_create(serializer)
         return Response(serializer.data, status=201)
     
+
+class DeletePopularViews(generics.DestroyAPIView):
+    queryset = Popular.objects.all()
+    serializer_class = TrendsSerializer
+
+    
