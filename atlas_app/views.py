@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.views import generic
 import requests
 from django.db.models import Q
-from .models import Lançamentos, Popular, Genres, Media
+from .models import Lançamentos, Popular, Genres, Media, APIKey
 
 
 def addedView(request):
@@ -43,6 +43,7 @@ class MediaDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filter'] = self.request.GET.get('filter', '')
+        context['media_api'] = APIKey.objects.get(name='superflix')
         return context
 
 
