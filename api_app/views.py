@@ -253,7 +253,7 @@ class DeletePopularViews(generics.DestroyAPIView):
     serializer_class = TrendsSerializer
 
 
-class ImportOffsetView(generics.APIView):
+class ImportOffsetView(generics.ListCreateAPIView):
 
     def get(self, request, key):
         obj, _ = ImportOffset.objects.get_or_create(key=key)
