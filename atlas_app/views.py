@@ -43,7 +43,8 @@ class MediaDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filter'] = self.request.GET.get('filter', '')
-        context['media_api'] = APIKey.objects.get(name='superflix')
+        superflix = APIKey.objects.get(name='superflix')
+        context['media_api'] = superflix.key
         return context
 
 
@@ -64,6 +65,7 @@ class MoviesListView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filter'] = self.request.GET.get('filter', '')
+        context['qtd'] = Media.objects.filter(typeMedia='filme').count()
         return context
 
 
@@ -84,6 +86,8 @@ class SeriesListView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filter'] = self.request.GET.get('filter', '')
+        context['qtd'] = Media.objects.filter(typeMedia='serie').count()
+
         return context
 
 

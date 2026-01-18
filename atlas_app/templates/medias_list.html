@@ -15,9 +15,11 @@
     <div class="row mt-4">
         <div class="col text-center">
             {% if medias and medias.first.typeMedia == 'filme' %}
-                <h3>Movies</h3>
+                <h3>Movies</h2>
+                <p>Catalago com {{ qtd }} Medias</p>
             {% else %}
                 <h3>Series</h3>
+                <p>Catalago com {{ qtd }} Medias</p>
             {% endif %}
         </div>
     </div>
