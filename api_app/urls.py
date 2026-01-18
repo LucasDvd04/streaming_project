@@ -13,4 +13,5 @@ urlpatterns = [
     path('v1/trends/', views.ListPopular.as_view(),  name='trends'),
     path('v1/trends/insert/', views.CreatPopular.as_view(),  name='trends_insert'),
     path('v1/trends/delete/<int:pk>', views.DeletePopularViews.as_view(),  name='trends_delete'),
+    path('offset/<str:key>/', views.ImportOffsetView.as_view(), name='import-offset'),
 ]

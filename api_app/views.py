@@ -1,8 +1,9 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
+
 
 import requests
 import json
@@ -10,7 +11,7 @@ from datetime import datetime, date
 import re
 
 from atlas_app.models import Lançamentos, Media, Genres, Popular, APIKey
-from .serializers import MediaSerializer,InsetMediaSerializer,InsetLancamentsSerializer,LancamentsSerializer,TrendsSerializer,InsetTrendsSerializer
+from .serializers import MediaSerializer,InsetMediaSerializer,InsetLancamentsSerializer,LancamentsSerializer,TrendsSerializer,InsetTrendsSerializer,ImportOffset,ImportOffsetSerializer
 
 def getKeyAPI(name):
     key = APIKey.objects.get(name=name).key
@@ -251,4 +252,24 @@ class DeletePopularViews(generics.DestroyAPIView):
     queryset = Popular.objects.all()
     serializer_class = TrendsSerializer
 
-    
+
+class ImportOffsetView(generics.APIView):
+
+    def get(self, request, key):
+        obj, _ = ImportOffset.objects.get_or_create(key=key)
+        serializer = ImportOffsetSerializer(obj)
+        return Response(serializer.data)
+
+    def post(self, request, key):
+        obj, _ = ImportOffset.objects.get_or_create(key=key)
+        serializer = ImportOffsetSerializer(
+            obj,
+            data=request.data,
+            partial=True
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
