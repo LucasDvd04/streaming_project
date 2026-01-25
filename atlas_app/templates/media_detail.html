@@ -27,13 +27,14 @@
             </div>
         </div>
         <div class="col-md-8">
+            <h3 class="allert">Infelizmente fullscreen está bloqueado<a href="{% url 'player' media.id %}" class="btn btn-sm btn-outline-primary">clique p/ tela maior</a></h2>
             <div class="card h-100 justify-content-center">
-                <div class="ratio ratio-16x9">
                     <iframe src="{{ media_api }}{{ media.typeMedia }}/{{ media.idIMDB }}"
-                        allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen frameborder="0"
-                        scrolling="no"
-                        style="width:100%;aspect-ratio:16/9;height:auto;max-width:100%;border:0;border-radius:12px;"></iframe>
-                </div>
+                        allow="fullscreen; autoplay; encrypted-media; picture-in-picture" allowfullscreen
+                        referrerpolicy="no-referrer" loading="lazy" frameborder="0" scrolling="no"
+                        style="width:100%; aspect-ratio:16/9; border:0; border-radius:12px;">
+                    </iframe>
+                
             </div>
         </div>
         {% else %}
@@ -63,4 +64,7 @@
 
     </div>
 </div>
+
+
+
 {% endblock %}

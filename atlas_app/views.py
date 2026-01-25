@@ -48,6 +48,17 @@ class MediaDetailView(generic.DetailView):
         return context
 
 
+class PlayerView(generic.DetailView):
+    model = Media
+    context_object_name = 'media'
+    template_name = 'player.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter'] = self.request.GET.get('filter', '')
+        superflix = APIKey.objects.get(name='superflix')
+        context['media_api'] = superflix.key
+        return context
 
 class MoviesListView(generic.ListView):
     model = Media
