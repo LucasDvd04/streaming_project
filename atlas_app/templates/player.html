@@ -1,8 +1,26 @@
-<div class="card h-100 justify-content-center">
+<!-- <div class="card h-100 justify-content-center">
                     <iframe src="{{ media_api }}{{ media.typeMedia }}/{{ media.idIMDB }}"
                         allow="fullscreen; autoplay; encrypted-media; picture-in-picture" allowfullscreen
                         referrerpolicy="no-referrer" loading="lazy" frameborder="0" scrolling="no"
                         style="width:100%; aspect-ratio:16/9; border:0; border-radius:12px;">
                     </iframe>
                 
-            </div>
+            </div> -->
+
+            <div id="PlayerContainer"></div>
+<script>
+    var type = "serie"; // "serie" ou "filme"
+    var id = "1396";    // TMDB ou IMDb
+    var season = "1";   // Apenas séries
+    var episode = "1";  // Apenas séries
+
+    function EmbedPlayer(t,i,s,e){
+        if(t=="filme"){s="";e=""}
+        var f=document.getElementById("PlayerContainer");
+        var u="https://warezcdn.site/"+t+"/"+i+"/"+s+"/"+e;
+        // Remove barras duplas
+        u = u.replace(/([^:])(\/{2,})/, "$1/");
+        f.innerHTML="<iframe src=\""+u+"\" width=\"100%\" height=\"100%\" frameborder=\"0\" allowfullscreen></iframe>";
+    }
+    EmbedPlayer(type,id,season,episode);
+</script>

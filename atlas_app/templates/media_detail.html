@@ -10,9 +10,9 @@
 
         {% if user.is_authenticated%}<!-- COLUNA DO PLAYER -->
         <!-- COLUNA DA IMAGEM / INFO -->
+         
         <div class="col-md-2">
             <div class="card h-100">
-
                 <img src="{{ media.poster }}" class="card-img-top img-fluid" style="height: 40vh; object-fit: fill;"
                     alt="{{ media.title }}">
 
@@ -27,15 +27,17 @@
             </div>
         </div>
         <div class="col-md-8">
-            <h3 class="allert">Infelizmente fullscreen está bloqueado<a href="{% url 'player' media.id %}" class="btn btn-sm btn-outline-primary">clique p/ tela maior</a></h2>
-            <div class="card h-100 justify-content-center">
-                    <iframe src="{{ media_api }}{{ media.typeMedia }}/{{ media.idIMDB }}"
-                        allow="fullscreen; autoplay; encrypted-media; picture-in-picture" allowfullscreen
-                        referrerpolicy="no-referrer" loading="lazy" frameborder="0" scrolling="no"
+            <!-- <h3 class="allert">Infelizmente fullscreen está bloqueado<a href="{% url 'player' media.id %}"
+                    class="btn btn-sm btn-outline-primary">clique p/ tela maior</a></h2> -->
+                <p class="text-warning"> <i class="bi bi-exclamation"> Feche as propagandas abertas em outras paginas</i></p>
+
+                <div class="card h-100 justify-content-center" id="playerContent">
+                    <iframe src="{{ media_api }}{{ media.typeMedia }}/{{ media.idIMDB }}/#noLink"
+                        allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen
                         style="width:100%; aspect-ratio:16/9; border:0; border-radius:12px;">
                     </iframe>
-                
-            </div>
+
+                </div>
         </div>
         {% else %}
         <div class="row justify-content-center mt-3">
@@ -64,7 +66,5 @@
 
     </div>
 </div>
-
-
 
 {% endblock %}
